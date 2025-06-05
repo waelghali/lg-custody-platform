@@ -1,8 +1,10 @@
-const { DataTypes } = require('sequelize');
+const { DataTypes, Model } = require('sequelize');
 const bcrypt = require('bcrypt');
-const sequelize = require('../config/database');
+const sequelize = require('../config/database'); // Import sequelize
 
-const User = sequelize.define('User', {
+class User extends Model {}
+
+User.init({
   id: {
     type: DataTypes.INTEGER,
     autoIncrement: true,
@@ -27,6 +29,8 @@ const User = sequelize.define('User', {
     defaultValue: 'user',
   },
 }, {
+  sequelize, // Use imported sequelize
+  modelName: 'User',
   hooks: {
     beforeCreate: async (user) => {
       const salt = await bcrypt.genSalt(10);
