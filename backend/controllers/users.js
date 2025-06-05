@@ -1,45 +1,50 @@
-const { models: { User } } = require('../models'); // Destructure User from models
+const { models: { User } } = require('../models');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
-// Register a new user and return JWT
 exports.register = async (req, res) => {
   try {
-    console.log('Register body:', req.body); // Debug
+    console.log('Register body:', req.body);
     const { username, email, password, role } = req.body;
     const user = await User.create({ username, email, password, role });
-    const token = jwt.sign({ id: user.id, role: user.role }, process.env.JWT_SECRET || 'secret', { expiresIn: '1h' });
+    const token = jwt.sign({ id: user.id, role: user.role }, process.env.JWT_SECRET || 'my_jwt_secret_2025', { expiresIn: '1h' });
     res.status(201).json({ user, token });
   } catch (error) {
-    console.error('Register error:', error); // Debug
+    console.error('Register error:', error);
     res.status(400).json({ error: error.message });
   }
 };
 
-// Login user and return JWT
 exports.login = async (req, res) => {
   try {
-    console.log('Login body:', req.body); // Debug
+    console.log('Login body:', req.body);
     const { email, password } = req.body;
     const user = await User.findOne({ where: { email } });
-    if (!user || !(await user.comparePassword(password))) {
+    console.log('User found:', user ? user.email : 'None');
+    if (!user) {
+      console.log('Login failed: User not found');
       return res.status(401).json({ error: 'Invalid credentials' });
     }
-    const token = jwt.sign({ id: user.id, role: user.role }, process.env.JWT_SECRET || 'secret', { expiresIn: '1h' });
+    const isMatch = await user.comparePassword(password);
+    console.log('Password match:', isMatch);
+    if (!isMatch) {
+      console.log('Login failed: Password mismatch');
+      return res.status(401).json({ error: 'Invalid credentials' });
+    }
+    const token = jwt.sign({ id: user.id, role: user.role }, process.env.JWT_SECRET || 'my_jwt_secret_2025', { expiresIn: '1h' });
     res.json({ user, token });
   } catch (error) {
-    console.error('Login error:', error); // Debug
+    console.error('Login error:', error);
     res.status(400).json({ error: error.message });
   }
 };
 
-// Get all users
 exports.getUsers = async (req, res) => {
   try {
     const users = await User.findAll();
     res.json(users);
   } catch (error) {
-    console.error('Get users error:', error); // Debug
+    console.error('Get users error:', error);
     res.status(500).json({ error: error.message });
   }
 };

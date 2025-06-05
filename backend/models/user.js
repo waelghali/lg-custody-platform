@@ -1,6 +1,6 @@
 const { DataTypes, Model } = require('sequelize');
 const bcrypt = require('bcrypt');
-const sequelize = require('../config/database'); // Import sequelize
+const sequelize = require('../config/database');
 
 class User extends Model {}
 
@@ -29,7 +29,7 @@ User.init({
     defaultValue: 'user',
   },
 }, {
-  sequelize, // Use imported sequelize
+  sequelize,
   modelName: 'User',
   hooks: {
     beforeCreate: async (user) => {
