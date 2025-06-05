@@ -11,6 +11,7 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      console.log('VITE_API_URL:', import.meta.env.VITE_API_URL);
       console.log('Login attempt:', { email, password });
       const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/users/login`, {
         email,
