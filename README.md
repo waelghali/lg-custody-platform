@@ -75,3 +75,13 @@ LG Custody Platform
  ## License
  MIT
 
+## Deployment
+- **Frontend**: Hosted on Vercel (`https://lg-custody-platform.vercel.app`)
+- **Backend**: Hosted on Render (`https://lg-custody-platform.onrender.com`)
+- **Database**: Render PostgreSQL (`lg_custody_db`)
+- **Environment Variables**:
+  - Backend: `.env` with `DB_HOST`, `DB_PORT`, `DB_NAME`, `DB_USER`, `DB_PASSWORD`
+  - Frontend: `.env` with `VITE_API_URL=https://lg-custody-platform.onrender.com`
+- **Test Credentials**:
+  - Email: `testadmin@example.com`
+  - Password: `test123`
